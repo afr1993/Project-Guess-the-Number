@@ -1,5 +1,8 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,9 +12,30 @@ public class Main {
         boolean winner = false;
         int min = 1;
         int max = 100;
-        int ramndomNumber = random.nextInt(max - min + 1) + min;
+        int randomNumber = random.nextInt(max - min + 1) + min;
         int maxAttempts = 10;
         int attempts = 0;
+        int bestScore = Integer.MAX_VALUE;//create best score at the highest value
+
+        File highScoreFile = new File("highscore.txt");
+        //Create File
+        try {
+            if (highScoreFile.createNewFile()) {
+                System.out.println("High score file created.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating high score file.");
+        }
+
+        if (highScoreFile.exists()) {
+            try (Scanner fileScanner = new Scanner(highScoreFile)) {
+                if (fileScanner.hasNextInt()) {
+                    bestScore = fileScanner.nextInt();
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading high score file.");
+            }
+        }
 
         while(play){
             System.out.println("Guest the number between "+min+" and "+max);
@@ -35,10 +59,10 @@ public class Main {
                 attempts++;
 
 
-                if (ramndomNumber == userNumber) { 
+                if (randomNumber == userNumber) {
                     winner = true;
                     break;
-                } else if (userNumber > ramndomNumber) {
+                } else if (userNumber > randomNumber) {
                     System.out.println("Number too High try again");
                 }else{
                     System.out.println("Number to Low try again");
@@ -50,8 +74,23 @@ public class Main {
 
             if(winner){
                 System.out.println("You Win in the attempt: "+attempts);
+                if (attempts < bestScore) {
+                    bestScore = attempts;
+                    System.out.println("New high score! Fewest attempts so far.");
+
+                    try (FileWriter writer = new FileWriter(highScoreFile)) {
+                        writer.write(String.valueOf(bestScore));
+                    } catch (IOException e) {
+                        System.out.println("Error saving high score.");
+                    }
+                }
             }else {
-                System.out.println("Sorry you loose");
+                System.out.println("Sorry, you lose. The correct number was: " + randomNumber);
+            }
+            if (bestScore != Integer.MAX_VALUE) {
+                System.out.println("Current high score (fewest attempts): " + bestScore);
+            } else {
+                System.out.println("No high score yet.");
             }
 
             attempts = 0;
@@ -64,7 +103,7 @@ public class Main {
             }
         }
 
-        System.out.println("Thanks for playing! Goodbye.");
+        System.out.println("Thanks for playing");
         scanner.close();
 
     }
