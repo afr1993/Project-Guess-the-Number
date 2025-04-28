@@ -17,7 +17,7 @@ public class Main {
             System.out.println("Guest the number between "+min+" and "+max);
 
             while(attempts < maxAttempts){
-                System.out.println("Enter your guest: ");
+                System.out.println("Enter your guess: ");
 
                 //Verification of input int
                 if (!scanner.hasNextInt()) {
