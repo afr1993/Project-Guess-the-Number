@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
+        //Adrian Flores Rangel
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         boolean play = true;
@@ -36,7 +37,7 @@ public class Main {
                 System.out.println("Error reading high score file.");
             }
         }
-
+        //Main loop
         while(play){
             System.out.println("Guest the number between "+min+" and "+max);
 
